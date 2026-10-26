@@ -1,23 +1,23 @@
-# NInfer SM75 · loktoto Edition
+# NInfer for RTX 2080 Ti 22GB on Windows (CUDA SM75) · loktoto Edition
 
-**Local Qwen inference for RTX 2080 Ti 22GB — maintained by [loktoto](https://github.com/loktoto).**
+**Experimental local LLM inference for a modified NVIDIA RTX 2080 Ti 22GB on Windows — CUDA SM75, NInfer and Qwen3.8-27B. Maintained by [loktoto](https://github.com/loktoto).**
 
 A community-maintained, performance-oriented [NInfer](https://github.com/Neroued/ninfer) derivative focused on making a modified **NVIDIA RTX 2080 Ti 22GB** useful for local **Qwen3.8-27B** inference on Windows. The project's priorities are reliable installation, verifiable CUDA SM75 correctness, memory efficiency, and practical OpenAI-compatible local serving.
 
 > **繁體中文：** 呢個係我哋維護嘅 RTX 2080 Ti 22GB / Qwen3.8-27B 本機 AI 專案。目標係 Windows 解壓即用、支援 API / MTP / Vision，並以真實 GPU 測試驗證效能。未完成硬件驗收前，唔會當佢係已推出嘅正式版。
 
-[Windows development PR](https://github.com/loktoto/ninfer-2080ti-22g/pull/2) · [RK4V4E8 opt-in (merged)](https://github.com/loktoto/ninfer-2080ti-22g/pull/14) · [Project status](docs/PROJECT-STATUS.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
+[Windows development PR](https://github.com/loktoto/ninfer-2080ti-22g-windows/pull/2) · [RK4V4E8 opt-in (merged)](https://github.com/loktoto/ninfer-2080ti-22g-windows/pull/14) · [Project status](docs/PROJECT-STATUS.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
 ## Release status — please read first
 
-**There is no hardware-qualified Windows production release published as of 11 October 2026 (releases API checked).** The default `master` branch contains the source baseline; the native Windows installer, pinned Qwen3.8 artifact and release workflow are being developed on [`windows-native-sm75`](https://github.com/loktoto/ninfer-2080ti-22g/tree/windows-native-sm75).
+**There is no hardware-qualified Windows production release published as of 11 October 2026 (releases API checked).** The default `master` branch contains the source baseline; the native Windows installer, pinned Qwen3.8 artifact and release workflow are being developed on [`windows-native-sm75`](https://github.com/loktoto/ninfer-2080ti-22g-windows/tree/windows-native-sm75).
 
 | Path | Availability | What it means |
 | --- | --- | --- |
 | Linux / WSL2 source build | Source available on `master` | Developer build; CUDA and toolchain required |
-| Native Windows 10/11 x64 | [PR #2 — in development](https://github.com/loktoto/ninfer-2080ti-22g/pull/2) | Build and installer are not yet a verified production release |
-| RK4V4E8 compressed KV cache | [PR #14 — merged into `master`](https://github.com/loktoto/ninfer-2080ti-22g/pull/14) | Opt-in source feature; **not** physically qualified for Windows release |
-| One-click Windows ZIP | [Releases](https://github.com/loktoto/ninfer-2080ti-22g/releases) | Use only an exact-SHA, physically qualified release when available |
+| Native Windows 10/11 x64 | [PR #2 — in development](https://github.com/loktoto/ninfer-2080ti-22g-windows/pull/2) | Build and installer are not yet a verified production release |
+| RK4V4E8 compressed KV cache | [PR #14 — merged into `master`](https://github.com/loktoto/ninfer-2080ti-22g-windows/pull/14) | Opt-in source feature; **not** physically qualified for Windows release |
+| One-click Windows ZIP | [Releases](https://github.com/loktoto/ninfer-2080ti-22g-windows/releases) | Use only an exact-SHA, physically qualified release when available |
 
 Do **not** infer hardware support, model quality, 64K/128K context reliability, or tok/s from a successful hosted CI compile. [Qualification criteria](docs/PROJECT-STATUS.md) require the exact packaged binaries on a physical 22GB SM75 device.
 
@@ -36,7 +36,7 @@ A modded 22GB card is **not** equivalent to a stock 11GB RTX 2080 Ti. The Window
 
 ### 1. Windows users — intended end-user path
 
-**Not yet released.** When a qualified ZIP appears on the [Releases page](https://github.com/loktoto/ninfer-2080ti-22g/releases):
+**Not yet released.** When a qualified ZIP appears on the [Releases page](https://github.com/loktoto/ninfer-2080ti-22g-windows/releases):
 
 1. Download the matching Windows ZIP and its `.sha256` checksum.
 2. Verify the ZIP checksum and extract **the complete archive**.
@@ -46,15 +46,15 @@ A modded 22GB card is **not** equivalent to a stock 11GB RTX 2080 Ti. The Window
 
 The planned native Windows runtime does **not** require Python, PowerShell 7, Visual Studio or a CUDA Toolkit on the end-user computer. Developer builds do need a pinned toolchain.
 
-[Detailed Windows installation guide (development branch)](https://github.com/loktoto/ninfer-2080ti-22g/blob/windows-native-sm75/docs/INSTALL-WINDOWS-SM75.md) · [Native build/release runbook](https://github.com/loktoto/ninfer-2080ti-22g/blob/windows-native-sm75/docs/windows-sm75.md)
+[Detailed Windows installation guide (development branch)](https://github.com/loktoto/ninfer-2080ti-22g-windows/blob/windows-native-sm75/docs/INSTALL-WINDOWS-SM75.md) · [Native build/release runbook](https://github.com/loktoto/ninfer-2080ti-22g-windows/blob/windows-native-sm75/docs/windows-sm75.md)
 
 ### 2. Linux / WSL2 — build from source
 
 This is a **developer path**, not the one-click Windows product.
 
 ```bash
-git clone https://github.com/loktoto/ninfer-2080ti-22g.git
-cd ninfer-2080ti-22g
+git clone https://github.com/loktoto/ninfer-2080ti-22g-windows.git
+cd ninfer-2080ti-22g-windows
 cmake -S . -B build -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_CUDA_ARCHITECTURES=75
@@ -87,7 +87,7 @@ The Windows development channel pins **Qwen3.8-27B, groupwise-int**, to one expl
 | Size | `18,210,531,328` bytes |
 | SHA-256 | `eec39564993d6e9c7d5e383382a760f093465c9d163ec9a1bd6b80199514bf3e` |
 
-These values come from the tracked [Windows artifact lock](https://github.com/loktoto/ninfer-2080ti-22g/blob/windows-native-sm75/config/windows-sm75-artifacts.json). Do **not** substitute the upstream “latest” artifact: newer container formats may not be compatible with this pinned Windows path. **Model files are downloaded separately** and are not included in the installer ZIP.
+These values come from the tracked [Windows artifact lock](https://github.com/loktoto/ninfer-2080ti-22g-windows/blob/windows-native-sm75/config/windows-sm75-artifacts.json). Do **not** substitute the upstream “latest” artifact: newer container formats may not be compatible with this pinned Windows path. **Model files are downloaded separately** and are not included in the installer ZIP.
 
 ## Engineering and verification
 
@@ -106,7 +106,7 @@ The 8K/32K/64K figures are **test targets**, not published service-level guarant
 - [Project status and release gates](docs/PROJECT-STATUS.md)
 - [CLI guide](docs/cli.md) and [Serving/API guide](docs/serving.md)
 - [Tests](tests/README.md) and [Benchmarks](bench/README.md)
-- [Windows user guide on the feature branch](https://github.com/loktoto/ninfer-2080ti-22g/blob/windows-native-sm75/docs/INSTALL-WINDOWS-SM75.md)
+- [Windows user guide on the feature branch](https://github.com/loktoto/ninfer-2080ti-22g-windows/blob/windows-native-sm75/docs/INSTALL-WINDOWS-SM75.md)
 - [Security and responsible disclosure](SECURITY.md)
 - [Contributor guide](CONTRIBUTING.md)
 
@@ -116,4 +116,4 @@ The 8K/32K/64K figures are **test targets**, not published service-level guarant
 
 We preserve existing [Apache License 2.0](LICENSE) terms, applicable original notices and attribution. [NOTICE](NOTICE.md) records the project relationship. Models and checkpoints remain the work of their respective creators and are subject to their own license terms. Modifications here are maintained by this fork's contributors.
 
-**Project contact:** GitHub Issues is currently **disabled** for this repository. Use [Pull Requests](https://github.com/loktoto/ninfer-2080ti-22g/pulls) for reproducible, non-sensitive fixes and development discussion. For vulnerabilities, follow the [security policy](SECURITY.md) and **never disclose exploit details in a public PR**.
+**Project contact:** GitHub Issues is currently **disabled** for this repository. Use [Pull Requests](https://github.com/loktoto/ninfer-2080ti-22g-windows/pulls) for reproducible, non-sensitive fixes and development discussion. For vulnerabilities, follow the [security policy](SECURITY.md) and **never disclose exploit details in a public PR**.
