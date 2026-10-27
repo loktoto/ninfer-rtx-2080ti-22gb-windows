@@ -184,14 +184,29 @@ int test_reasoning_effort() {
     failures += check(!none_semantics.enable_thinking && !none_semantics.reasoning_effort,
                       "Responses none effort did not disable thinking");
 
+    for (const char* wire : {"minimal", "high", "max"}) {
+        Json body         = base;
+        body["reasoning"] = Json{{"effort", wire}};
+        const GenerationRequest request = parse_responses_request(body, limits()).generation;
+        failures += check(api_code([&] {
+                              (void)resolve_prompt_semantics(request, ServeOptions{},
+                                                             effort_capabilities());
+                          }) == "reasoning_effort_not_supported",
+                          std::string("Responses accepted unsupported effort: ") + wire);
+    }
+
     Json high                            = base;
     high["reasoning"]                    = Json{{"effort", "high"}};
     const GenerationRequest high_request = parse_responses_request(high, limits()).generation;
-    failures += check(api_code([&] {
-                          (void)resolve_prompt_semantics(high_request, ServeOptions{},
-                                                         effort_capabilities());
-                      }) == "reasoning_effort_not_supported",
-                      "Responses high effort bypassed template capability validation");
+    ninfer::PromptCapabilities high_capabilities;
+    high_capabilities.enable_thinking       = true;
+    high_capabilities.reasoning_effort.high = true;
+    const ninfer::PromptInput high_prompt = to_prompt_input(
+        high_request, resolve_prompt_semantics(high_request, ServeOptions{}, high_capabilities),
+        {});
+    failures += check(high_prompt.options.enable_thinking &&
+                          high_prompt.options.reasoning_effort == ninfer::ReasoningEffort::High,
+                      "Responses supported high effort was rejected or changed to xhigh");
 
     Json invalid         = base;
     invalid["reasoning"] = Json{{"effort", "ultra"}};

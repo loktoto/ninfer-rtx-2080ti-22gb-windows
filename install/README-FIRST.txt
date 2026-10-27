@@ -1,7 +1,7 @@
 NInfer SM75 by loktoto / Qwen3.8-27B - START HERE
 ===================================================
 
-Maintained by: https://github.com/loktoto/ninfer-2080ti-22g
+Maintained by: https://github.com/loktoto/ninfer-rtx-2080ti-22gb-windows
 Derived from:  https://github.com/Neroued/ninfer (Apache-2.0)
 This package should only be used from a hardware-qualified release.
 
@@ -17,9 +17,9 @@ Default paths:
   Model:   D:\AI\models\qwen when D: exists, otherwise <runtime>\models
 
 Daily use:
-  launchers\Start-NInfer.bat          Conservative production baseline
-  launchers\Start-NInfer-MTP.bat      MTP3 speculative decoding
-  launchers\Start-NInfer-Vision.bat   Vision enabled
+  launchers\Start-NInfer.bat          Base text mode (qualify this exact package)
+  launchers\Start-NInfer-MTP.bat      MTP3 speculative decoding (separate qualification)
+  launchers\Start-NInfer-Vision.bat   Vision enabled (separate qualification)
   launchers\Stop-NInfer.bat           Stop the tracked server
   launchers\Status-NInfer.bat         Status / health
   launchers\Configure-NInfer.bat      Change port/context/model/device
