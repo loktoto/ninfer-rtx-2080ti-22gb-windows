@@ -95,7 +95,9 @@ artifact template's existing tool/reasoning-instruction composition.
 At startup, NInfer resolves prompt capabilities from the exact `frontend/chat_template.jinja`
 resource embedded in the loaded artifact. It does not infer them from the request's `model` field,
 the artifact identity, or a target profile. A recognized effort-capable template exposes `low`,
-`medium`, and `xhigh`; omitting effort uses that template's declared default. An explicit effort
+`medium`, and `xhigh`; `--chat-style sharp-v22.1` additionally exposes `high` for that template.
+Omitting effort uses the template's declared default. Effort values are checked individually,
+without substituting `low` for `minimal` or `xhigh` for `high`/`max`. An explicit effort
 not exposed by the loaded template returns HTTP 400 with code
 `reasoning_effort_not_supported` before prompt preparation.
 
@@ -211,7 +213,7 @@ wire response contains typed `output` Items.
 | `temperature` | finite number in `[0,2]` |
 | `top_p` | finite number in `[0,1]` |
 | `metadata` | at most 16 string pairs; keys at most 64 characters and values at most 512 |
-| `reasoning.effort` | `none` disables thinking; `low`, `medium`, or `xhigh` selects an effort exposed by the loaded chat template; `minimal`, `high`, and `max` return `reasoning_effort_not_supported` for the registered templates |
+| `reasoning.effort` | `none` disables thinking; other protocol values select the exact effort when exposed by the loaded chat template and chat style, otherwise return `reasoning_effort_not_supported` |
 | `chat_template_kwargs.preserve_thinking` | optional boolean controlling whether closed-turn reasoning remains in reconstructed prompts |
 | `preserve_thinking` | top-level alias for the same option; conflicting values are rejected |
 | `text.format` | omitted or `{"type":"text"}` only |
@@ -418,8 +420,9 @@ uses the server default.
 
 Anthropic `output_config.effort` accepts the protocol values `low`, `medium`, `high`, `xhigh`, and
 `max`. The value is then checked against the loaded chat template in the same way as the OpenAI
-endpoints; the registered effort-capable template exposes `low`, `medium`, and `xhigh`. Combining
-an effort with `thinking.type: "disabled"` is rejected as contradictory.
+endpoints; the registered effort-capable template exposes `low`, `medium`, and `xhigh`, plus
+`high` with `--chat-style sharp-v22.1`. Combining an effort with `thinking.type: "disabled"` is
+rejected as contradictory.
 
 Anthropic's `model` field is treated as a response label and does not select the loaded artifact.
 

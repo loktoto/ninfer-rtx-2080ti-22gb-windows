@@ -131,6 +131,8 @@ ResolvedPromptSemantics resolve_prompt_semantics(const GenerationRequest& reques
     case RequestedReasoningEffort::None:
         break;
     case RequestedReasoningEffort::Minimal:
+        result.reasoning_effort = ninfer::ReasoningEffort::Minimal;
+        break;
     case RequestedReasoningEffort::Low:
         result.reasoning_effort = ninfer::ReasoningEffort::Low;
         break;
@@ -138,9 +140,13 @@ ResolvedPromptSemantics resolve_prompt_semantics(const GenerationRequest& reques
         result.reasoning_effort = ninfer::ReasoningEffort::Medium;
         break;
     case RequestedReasoningEffort::High:
+        result.reasoning_effort = ninfer::ReasoningEffort::High;
+        break;
     case RequestedReasoningEffort::XHigh:
-    case RequestedReasoningEffort::Max:
         result.reasoning_effort = ninfer::ReasoningEffort::XHigh;
+        break;
+    case RequestedReasoningEffort::Max:
+        result.reasoning_effort = ninfer::ReasoningEffort::Max;
         break;
     }
 

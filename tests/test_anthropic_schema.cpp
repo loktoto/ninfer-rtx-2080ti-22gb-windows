@@ -558,14 +558,29 @@ int test_reasoning_effort() {
                           low_prompt.options.reasoning_effort == ninfer::ReasoningEffort::Low,
                       "Anthropic low effort did not reach PromptInput");
 
+    for (const char* wire : {"high", "max"}) {
+        Json body             = base;
+        body["output_config"] = Json{{"effort", wire}};
+        const GenerationRequest request = parse_messages_request(body, default_limits());
+        failures += check(api_code([&] {
+                              (void)resolve_prompt_semantics(request, default_server(),
+                                                             effort_capabilities());
+                          }) == "reasoning_effort_not_supported",
+                          std::string("Anthropic accepted unsupported effort: ") + wire);
+    }
+
     Json high                            = base;
     high["output_config"]                = Json{{"effort", "high"}};
     const GenerationRequest high_request = parse_messages_request(high, default_limits());
-    failures += check(api_code([&] {
-                          (void)resolve_prompt_semantics(high_request, default_server(),
-                                                         effort_capabilities());
-                      }) == "reasoning_effort_not_supported",
-                      "Anthropic high effort bypassed template capability validation");
+    ninfer::PromptCapabilities high_capabilities;
+    high_capabilities.enable_thinking       = true;
+    high_capabilities.reasoning_effort.high = true;
+    const ninfer::PromptInput high_prompt = to_prompt_input(
+        high_request, resolve_prompt_semantics(high_request, default_server(), high_capabilities),
+        {});
+    failures += check(high_prompt.options.enable_thinking &&
+                          high_prompt.options.reasoning_effort == ninfer::ReasoningEffort::High,
+                      "Anthropic supported high effort was rejected or changed to xhigh");
 
     Json conflict        = low;
     conflict["thinking"] = Json{{"type", "disabled"}};

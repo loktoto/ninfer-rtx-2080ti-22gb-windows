@@ -252,10 +252,13 @@ struct ReasoningEffortCapabilities {
             return low;
         case ReasoningEffort::Medium:
             return medium;
+        case ReasoningEffort::High:
+            return high;
         case ReasoningEffort::XHigh:
             return xhigh;
+        default:
+            return false;
         }
-        return false;
     }
 };
 
