@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="280" viewBox="0 0 1200 280" role="img" aria-labelledby="title description">
+  <title id="title">NInfer — Turing on Windows</title>
+  <desc id="description">loktoto's native Windows development project for Qwen3.8-27B on an RTX 2080 Ti with 22GB VRAM, using CUDA SM75.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#111c26"/>
+      <stop offset="1" stop-color="#091119"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#8bb3ad" stroke-opacity=".06"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="280" rx="16" fill="url(#background)"/>
+  <rect width="1200" height="280" rx="16" fill="url(#grid)"/>
+  <path d="M48 46h36" stroke="#a4e8b5" stroke-width="4" stroke-linecap="round"/>
+  <text x="99" y="52" fill="#a4e8b5" font-family="Segoe UI,Arial,sans-serif" font-size="15" letter-spacing="2">TURING ON WINDOWS</text>
+  <text x="46" y="130" fill="#f1f6f8" font-family="Segoe UI,Arial,sans-serif" font-size="66" font-weight="700" letter-spacing="-2">NInfer</text>
+  <text x="49" y="172" fill="#c1cdd5" font-family="Segoe UI,Arial,sans-serif" font-size="24">RTX 2080 Ti 22GB / Qwen3.8-27B</text>
+  <text x="50" y="235" fill="#8faaa8" font-family="Segoe UI,Arial,sans-serif" font-size="16">SM75 CUDA</text>
+  <path d="M164 221v18" stroke="#3c555a"/>
+  <text x="185" y="235" fill="#8faaa8" font-family="Segoe UI,Arial,sans-serif" font-size="16">Native Windows development</text>
+  <g transform="translate(792 70)" fill="none" stroke="#7fb695" stroke-width="1.5">
+    <path d="M-34 18h25m-25 18h25m-25 18h25m-25 18h25" opacity=".4"/>
+    <rect width="306" height="135" rx="12" fill="#12232a"/>
+    <rect x="19" y="16" width="268" height="103" rx="7" stroke-opacity=".3"/>
+    <circle cx="85" cy="67" r="36"/>
+    <circle cx="85" cy="67" r="10" fill="#203c3c"/>
+    <path d="M85 32v25m35 10H95M85 102V77M50 67h25m-15-25 18 18m32-18L92 60m18 32L92 74M60 92l18-18" stroke-opacity=".6"/>
+    <path d="M151 35h108m-108 16h108m-108 16h108m-108 16h108m-108 16h108" stroke-opacity=".3"/>
+    <path d="M36 136v12h120v-12m-104 0v12m17-12v12m17-12v12m17-12v12m17-12v12m17-12v12" stroke-opacity=".55"/>
+    <path d="M307 14h10v135h-10" stroke-opacity=".65"/>
+  </g>
+  <text x="1114" y="239" text-anchor="end" fill="#9db5bf" font-family="Segoe UI,Arial,sans-serif" font-size="16">loktoto</text>
+</svg>

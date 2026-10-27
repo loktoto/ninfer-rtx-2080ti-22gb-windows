@@ -1,9 +1,19 @@
-# NInfer SM75 · loktoto Edition — documentation
+# Documentation
 
-Start with the [loktoto-maintained project README](../README.md) to build NInfer, download a published artifact, and
-run the CLI or HTTP server.
+Start with the [project README](../README.md) for the RTX 2080 Ti 22GB target, branch map, build commands and current limitations. This fork is developed and maintained by [loktoto](https://github.com/loktoto), building on [NInfer by Neroued](https://github.com/Neroued/ninfer).
 
-The [current project status](PROJECT-STATUS.md) distinguishes available source functionality from the **unreleased** native Windows path. Windows install/build documentation currently lives in [`windows-native-sm75`](https://github.com/loktoto/ninfer-2080ti-22g/tree/windows-native-sm75/docs): [install guide](https://github.com/loktoto/ninfer-2080ti-22g/blob/windows-native-sm75/docs/INSTALL-WINDOWS-SM75.md), [technical runbook](https://github.com/loktoto/ninfer-2080ti-22g/blob/windows-native-sm75/docs/windows-sm75.md).
+## SM75 and native Windows
+
+| Reference | Use it for |
+|---|---|
+| [Project status](PROJECT-STATUS.md) | Development map and release acceptance requirements |
+| [Recorded Windows GPU tests](https://github.com/loktoto/ninfer-rtx-2080ti-22gb-windows/blob/windows-native-sm75/docs/WINDOWS-SM75-LOCAL-VALIDATION.md) | October 12–13 installation/Base passes, failed retrieval/tool/MTP gates and follow-up numerical investigation |
+| [Windows installation](https://github.com/loktoto/ninfer-rtx-2080ti-22gb-windows/blob/windows-native-sm75/docs/INSTALL-WINDOWS-SM75.md) | Installer, launchers, local API and repair on the native branch |
+| [Windows build and acceptance](https://github.com/loktoto/ninfer-rtx-2080ti-22gb-windows/blob/windows-native-sm75/docs/windows-sm75.md) | Pinned developer toolchain, packaging and physical GPU qualification |
+| [SM75 RK4V4E8 profile](sm75-rk4v4-e8-qwen3_8_27b.md) | Opt-in compressed KV implementation and source-baseline tuning tools |
+| [SM75 physical validation](sm75-2080ti-validation-runbook.md) | Capacity, performance and long-context quality checks |
+
+The native Windows files live on `windows-native-sm75`; `master` carries the SM75 source baseline. The recorded Windows package did not pass production acceptance. Read the test report before interpreting a feature, context size or benchmark as qualified.
 
 ## User guides
 
@@ -11,12 +21,14 @@ The [current project status](PROJECT-STATUS.md) distinguishes available source f
 |---|---|
 | [CLI](cli.md) | text, chat-history, image/video input, output streams, sampling, MTP, and common runtime options |
 | [HTTP serving](serving.md) | OpenAI Responses/Chat Completions, Anthropic Messages, state, streaming, token counting, authentication, and tool calls |
-| [Performance](performance.md) | RTX 5090 single-request and concurrent-decode results, MTP/DFlash measurements, and reproduction commands |
+| [Performance](performance.md) | Upstream RTX 5090 single-request and concurrent-decode results, MTP/DFlash measurements, and reproduction commands |
 | [CLI examples](../examples/cli/) | committed text, multimodal, thinking, long-decode, and long-context inputs |
 
 The executable `--help` output is the exact source for command-line option spelling and defaults.
 
 ## Model artifacts
+
+These are inherited NInfer artifact references. Availability here does not establish SM75 or Windows compatibility. The native Windows channel uses its own [pinned container-v2 artifact lock](https://github.com/loktoto/ninfer-rtx-2080ti-22gb-windows/blob/windows-native-sm75/config/windows-sm75-artifacts.json); do not substitute a newer download from the table.
 
 | Model | Weights | Download | Versioned model card source |
 |---|---|---|---|
