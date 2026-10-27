@@ -1,14 +1,14 @@
-# Security policy · NInfer SM75
+# Security policy
 
 Maintained by [loktoto](https://github.com/loktoto). This is an independently maintained NInfer derivative; it is not an official upstream NInfer or Qwen security advisory channel.
 
 ## Supported versions
 
-The Windows SM75 product is **under development** and has no hardware-qualified production release as of **2026-10-11**. No currently published production-version support window is claimed.
+The Windows SM75 product is **experimental**. No production release is published as of **2026-10-26**, and no production-version support window is claimed. The [recorded Windows tests](https://github.com/loktoto/ninfer-rtx-2080ti-22gb-windows/blob/windows-native-sm75/docs/WINDOWS-SM75-LOCAL-VALIDATION.md) describe the tested package and its failed qualification gates.
 
 ## Report a vulnerability
 
-**Do not publish working exploits, user API keys or private tokens in a public issue.** If GitHub's private vulnerability reporting is enabled for this repository, use **Security → Report a vulnerability**. **GitHub Issues is currently disabled**; do not try to submit exploit details in a public pull request. If the private reporting button is absent, refrain from sharing sensitive reproduction details publicly until the maintainer enables a private disclosure channel.
+**Do not publish working exploits, user API keys or private tokens in a public issue.** If GitHub's private vulnerability reporting is enabled for [this repository](https://github.com/loktoto/ninfer-rtx-2080ti-22gb-windows/security), use **Security → Report a vulnerability**. **GitHub Issues is currently disabled**; do not try to submit exploit details in a public pull request. If the private reporting button is absent, refrain from sharing sensitive reproduction details publicly until the maintainer enables a private disclosure channel.
 
 Provide the affected commit, OS, GPU, reproduction environment, expected/actual security behavior and a sanitized reproducer. Never attach real model credentials or another user's private logs.
 

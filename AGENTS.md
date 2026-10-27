@@ -104,19 +104,35 @@ intermediate artifacts are excluded unless requested or themselves the deliverab
 
 ## Current product contract
 
-NInfer is a from-scratch C++/CUDA inference engine for maximum single-GPU inference performance on
-a small set of explicitly registered checkpoint artifacts. The supported identities are
-`qwen3.6-27b/groupwise-int`, `qwen3.6-27b/nvfp4`, `qwen3.8-27b/groupwise-int`,
-`qwen3.8-27b/nvfp4`, and `qwen3.6-35b-a3b/groupwise-int`. The current implementation is compiled
-for `sm_120a` and tuned and measured on NVIDIA GeForce RTX 5090. All identities execute Text,
-image/video Vision, MTP, prefix reuse, CLI, OpenAI/Anthropic serving, and measurement through the
-same public `.ninfer` Engine route; the 35B-A3B target additionally supports text-only DFlash.
+This repository is loktoto's Windows / SM75 adaptation of
+[NInfer by Neroued](https://github.com/Neroued/ninfer), under Apache-2.0. The maintained
+product target is native Windows 10/11 x64 on a modified RTX 2080 Ti with 22GB VRAM
+(`sm_75`), serving the pinned Qwen3.8-27B `groupwise-int` container-v2 artifact.
+Preserve upstream authorship, license and notices when describing local development.
+Do not rename public `ninfer` APIs, artifact formats, namespaces or model identifiers
+for branding. For native work, use `docs/windows-sm75.md` and the artifact/toolchain
+locks under `config/` on the Windows branch as the build and package authorities.
+
+`master` contains the shared SM75 source baseline. `windows-native-sm75` contains the
+native Windows runtime, installer, pinned toolchain and package qualification flow.
+Use that branch as the implementation baseline for Windows work; do not describe its
+scripts as present on `master`. See `docs/PROJECT-STATUS.md` for the development map
+and the Windows branch's `docs/WINDOWS-SM75-LOCAL-VALIDATION.md` for recorded physical
+results. Short Base-mode inference and installation have passed on the recorded
+package; retrieval, tool calling and MTP require replacement-build qualification.
+Do not turn a successful compile or an isolated kernel test into a model-quality claim.
+
+The inherited engine also registers `qwen3.6-27b/groupwise-int`, `qwen3.6-27b/nvfp4`,
+`qwen3.8-27b/nvfp4`, and `qwen3.6-35b-a3b/groupwise-int`, with upstream paths for
+Text, Vision, MTP, prefix reuse and text-only 35B-A3B DFlash. Their presence is not
+Windows/SM75 qualification. The Windows profile uses `NINFER_QWEN38_ONLY=ON`;
+keep optional MTP, Vision and compressed KV claims tied to their own physical tests.
 
 The current workload is one GPU and one resident model instance with a startup-fixed one to eight
 active requests. The Engine forms one compact decode batch at every round boundary and uses bounded
 FIFO ingress with no request preemption. Large-scale or preemptive continuous batching, priority/QoS
-scheduling, additional checkpoint targets, and retargeting the implementation to another execution
-platform are outside the current product. This is a local, single-owner project. Registered models,
+scheduling, additional checkpoint targets, and execution platforms beyond the Windows/SM75 port and
+its inherited source paths are outside the current product. This is a local, single-owner project. Registered models,
 generated artifacts, and the local workflow are trusted.
 Requirements derived from a different workload, trust model, or deployment model are out of scope
 until that product contract is explicitly changed.
@@ -313,7 +329,7 @@ These are conventional project resources, not a checklist of resources every tas
 | conversion report | `out/qwen3_6_27b.ninfer.conversion.json` |
 | normal build | `build/` |
 | profiler output | `profiles/ncu/`, `profiles/nsys/`, `profiles/bench/` |
-| hardware/toolchain | RTX 5090, `sm_120a`, CUDA 13.1 |
+| Windows hardware/toolchain | RTX 2080 Ti 22GB, `sm_75`; exact versions in the Windows branch toolchain lock |
 
 Use the selected Python 3.11 interpreter explicitly. Do not install or upgrade dependencies unless
 the task requires it. Never select an artifact by glob, modification time, or an unqualified
