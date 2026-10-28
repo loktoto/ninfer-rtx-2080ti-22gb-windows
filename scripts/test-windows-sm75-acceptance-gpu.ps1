@@ -3,7 +3,7 @@ Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot 'resolve-windows-sm75-gpu.ps1')
 
 $Good = '0, NVIDIA GeForce RTX 2080 Ti, 22528, 7.5, 616.56'
-$Other = '1, NVIDIA GeForce RTX 4070, 12288, 8.9, 616.56'
+$Other = '0, NVIDIA GeForce RTX 4070, 12288, 8.9, 616.56'
 $GoodOne = '1, NVIDIA GeForce RTX 2080 Ti, 22528, 7.5, 616.56'
 $Cases = @(
     @{ Name='single target'; Rows=@($Good); Device=0; Pass=$true },
