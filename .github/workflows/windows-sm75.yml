@@ -71,6 +71,10 @@ jobs:
         shell: powershell
         run: .\scripts\test-windows-sm75-gpu-preflight.ps1
 
+      - name: Test physical acceptance GPU index binding
+        shell: powershell
+        run: .\scripts\test-windows-sm75-acceptance-gpu.ps1
+
   build:
     needs: powershell51-preflight
     runs-on: windows-2022
