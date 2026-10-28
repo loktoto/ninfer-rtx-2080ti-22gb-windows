@@ -62,6 +62,9 @@ if ([string]$Evidence.model_sha256 -ne $ExpectedModelSha) {
 
 $Gpu = $Evidence.gpu
 if (-not $Gpu) { throw "Acceptance evidence is missing structured GPU metadata." }
+if ([int]$Evidence.device -ne [int]$Gpu.index) {
+    throw "Acceptance GPU index does not match the device actually used for inference."
+}
 if ([string]$Gpu.compute_capability -ne "7.5") {
     throw "Acceptance requires compute capability 7.5; evidence reports '$($Gpu.compute_capability)'."
 }
