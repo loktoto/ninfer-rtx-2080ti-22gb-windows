@@ -323,6 +323,7 @@ if (-not $SkipMtpParity) {
         "--max-context", "8192",
         "--max-new", "64",
         "--kv-dtype", "int8",
+        "--device", $Device.ToString(),
         "--greedy",
         "--no-thinking",
         "--raw-output",
@@ -358,21 +359,8 @@ $GpuRows = @(& nvidia-smi --query-gpu=index,name,memory.total,compute_cap,driver
 if ($LASTEXITCODE -ne 0 -or $GpuRows.Count -eq 0) {
     throw "nvidia-smi evidence query failed."
 }
-$SelectedGpu = $null
-foreach ($Row in $GpuRows) {
-    $Parts = @($Row -split "," | ForEach-Object { $_.Trim() })
-    if ($Parts.Count -ge 5 -and [int]$Parts[0] -eq $Device) {
-        $SelectedGpu = [ordered]@{
-            index = [int]$Parts[0]
-            name = $Parts[1]
-            memory_total_mib = [int]$Parts[2]
-            compute_capability = $Parts[3]
-            driver_version = $Parts[4]
-        }
-        break
-    }
-}
-if (-not $SelectedGpu) { throw "Selected GPU $Device was not found in nvidia-smi evidence." }
+. (Join-Path $PSScriptRoot "resolve-windows-sm75-gpu.ps1")
+$SelectedGpu = Get-QualifiedSm75Gpu -Rows $GpuRows -Device $Device
 
 $BuildGitSha = $null
 if (Test-Path (Join-Path $RepoRoot ".git")) {
