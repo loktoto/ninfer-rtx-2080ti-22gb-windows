@@ -8,6 +8,11 @@ on:
         required: true
         default: "D:\\AI\\models\\qwen\\qwen3_8_27b.ninfer"
         type: string
+      gpu_device:
+        description: "nvidia-smi GPU index (same device for every check)"
+        required: true
+        default: "0"
+        type: string
       build_jobs:
         description: "Parallel compile jobs on the self-hosted machine"
         required: true
@@ -34,16 +39,21 @@ jobs:
         with:
           arch: x64
 
-      - name: Validate runner identity and pinned toolchain
+      - name: Validate selected GPU identity and pinned toolchain
         shell: powershell
+        env:
+          NINFER_GPU_DEVICE: ${{ inputs.gpu_device }}
         run: |
-          $gpu = & nvidia-smi --query-gpu=index,name,memory.total,compute_cap,driver_version --format=csv,noheader,nounits
-          if ($LASTEXITCODE -ne 0) { throw "nvidia-smi failed." }
-          Write-Host $gpu
-          if (($gpu -join "`n") -notmatch "2080\s*Ti") { throw "This workflow requires an RTX 2080 Ti runner." }
-          if (($gpu -join "`n") -notmatch ",\s*7\.5\s*,") { throw "This workflow requires compute capability 7.5." }
+          $device = -1
+          if (-not [int]::TryParse($env:NINFER_GPU_DEVICE, [ref]$device) -or $device -lt 0 -or $device -gt 15) {
+            throw "gpu_device must be an integer in 0..15."
+          }
+          $rows = @(& nvidia-smi --query-gpu=index,name,memory.total,compute_cap,driver_version --format=csv,noheader,nounits)
+          if ($LASTEXITCODE -ne 0 -or $rows.Count -eq 0) { throw "nvidia-smi failed." }
+          . .\scripts\resolve-windows-sm75-gpu.ps1
+          $selected = Get-QualifiedSm75Gpu -Rows $rows -Device $device
+          Write-Host ("Qualified GPU {0}: {1}, {2} MiB, SM{3}, driver {4}" -f $selected.index,$selected.name,$selected.memory_total_mib,$selected.compute_capability,$selected.driver_version)
           .\scripts\assert-windows-sm75-toolchain.ps1
-          Write-Host "Self-hosted GPU identity passed. The build script will initialize VS2022 and validate CUDA/CMake/Ninja."
 
       - name: Clean production build and numerical regressions
         shell: powershell
@@ -70,9 +80,14 @@ jobs:
         shell: powershell
         env:
           NINFER_MODEL_PATH: ${{ inputs.model_path }}
+          NINFER_GPU_DEVICE: ${{ inputs.gpu_device }}
         run: |
           $ErrorActionPreference = "Stop"
           $model = $env:NINFER_MODEL_PATH
+          $device = -1
+          if (-not [int]::TryParse($env:NINFER_GPU_DEVICE, [ref]$device) -or $device -lt 0 -or $device -gt 15) {
+            throw "gpu_device must be an integer in 0..15."
+          }
           if ([string]::IsNullOrWhiteSpace($model)) { throw "model_path must not be empty." }
           $zip = Get-ChildItem .\dist -Filter "ninfer-windows-sm75-*.zip" -File |
             Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1
@@ -96,7 +111,8 @@ jobs:
           .\scripts\acceptance-windows-sm75.ps1 `
             -Model $model `
             -PackagePath $zip.FullName `
-            -InstallDir $installDir
+            -InstallDir $installDir `
+            -Device $device
 
       - name: Verify generated acceptance evidence
         shell: powershell
