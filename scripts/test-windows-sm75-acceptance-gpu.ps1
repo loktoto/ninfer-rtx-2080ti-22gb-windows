@@ -18,15 +18,17 @@ $Cases = @(
 )
 foreach ($Case in $Cases) {
     $Rejected = $false
+    $Failure = ''
     $Selected = $null
     try {
         $Selected = Get-QualifiedSm75Gpu -Rows $Case.Rows -Device $Case.Device
     } catch {
         $Rejected = $true
+        $Failure = $_.Exception.Message
     }
     if ($Case.Pass) {
         if ($Rejected -or $null -eq $Selected -or $Selected.index -ne $Case.Device) {
-            throw "GPU fixture unexpectedly failed: $($Case.Name)"
+            throw "GPU fixture unexpectedly failed: $($Case.Name). Cause: $Failure"
         }
     } elseif (-not $Rejected) {
         throw "GPU fixture unexpectedly accepted: $($Case.Name)"
