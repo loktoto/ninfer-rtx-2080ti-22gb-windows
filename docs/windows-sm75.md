@@ -332,8 +332,18 @@ Production acceptance is bound to a concrete release ZIP. Package first, then ru
 $zip = Get-ChildItem .\dist -Filter "ninfer-windows-sm75-*.zip" | Select-Object -First 1
 .\scripts\acceptance-windows-sm75.ps1 `
   -Model "D:\AI\models\qwen\qwen3_8_27b.ninfer" `
-  -PackagePath $zip.FullName
+  -PackagePath $zip.FullName `
+  -Device 0
 ```
+
+Use the physical device index reported by nvidia-smi (0 in the example). On a
+multi-GPU runner, the manual hardware workflow's gpu_device input selects the
+single qualified RTX 2080 Ti 22GB / SM75 / R580+ row. The workflow masks all
+other GPUs during CUDA numerical regressions, then restores the physical
+index for extracted-package inference, MTP CLI parity, and recorded evidence.
+A name on one GPU and memory/compute capability on a different GPU must never
+qualify the run. Windows-hosted inventory fixtures check this contract; they
+do not prove hardware execution.
 
 The self-hosted workflow goes one step further: it expands that ZIP and runs the full acceptance
 suite against the binaries extracted from the qualified package. The harness performs the
